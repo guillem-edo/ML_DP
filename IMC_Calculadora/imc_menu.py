@@ -1,11 +1,9 @@
-import pandas as pd
 import datetime
 import csv
-import matplotlib.pyplot as plt
+import os
 
-def calcular_IMC(peso, altura):
-    return peso / altura ** 2
-
+ruta_carpeta = r'\MACHINE-LEARNING\IMC_Calculadora\datos.csv'
+ruta_csv = os.path.join(ruta_carpeta, 'datos.csv')
 
 def determinar_estado_IMC(IMC):
     switch = {
@@ -35,35 +33,28 @@ def obtener_estado_segun_IMC(IMC):
 def calcular_IMC(peso, altura):
     return peso / altura ** 2
 
-def calcular_peso():
-    peso = float(input("Introduce tu peso en kilogramos. Puedes ponerlo con decimales: "))
-    return peso
-
-def calcular_altura():
-    altura = float(input("Introduce tu altura en metros: "))
-    return altura
-
 def mostrar_fecha_hora():
     now = datetime.datetime.now()
     print("Fecha y hora actual:", now.strftime("%Y-%m-%d %H:%M:%S"))
 
-def registrar_datos_csv(peso, altura, IMC, estado_IMC):
+def registrar_datos_csv(IMC, estado_IMC):
     now = datetime.datetime.now()
-    with open('datos.csv', mode='a', newline='') as file:
+    with open(ruta_csv, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([now.strftime("%Y-%m-%d"), peso, altura, IMC, estado_IMC])
+        writer.writerow([now.strftime("%Y-%m-%d"), IMC, estado_IMC])
 
 def leer_datos_csv():
     datos_registrados = []
-    with open('datos.csv', mode='r') as file:
+    with open(ruta_csv, mode='r') as file:
         reader = csv.reader(file)
         for row in reader:
-            datos_registrados.append((datetime.datetime.strptime(row[0], "%Y-%m-%d"), float(row[1]), float(row[2]), float(row[3]), row[4]))
+            datos_registrados.append((datetime.datetime.strptime(row[0], "%Y-%m-%d"), float(row[1]), row[2]))
     return datos_registrados
 
-def mostrar_grafica(datos_registrados):
+def mostrar_grafica():
+    datos_registrados = leer_datos_csv()
     fechas = [registro[0] for registro in datos_registrados]
-    IMCs = [registro[3] for registro in datos_registrados]
+    IMCs = [registro[1] for registro in datos_registrados]
     plt.plot(fechas, IMCs)
     plt.title('Registro de IMC a lo largo del año')
     plt.xlabel('Fecha')
@@ -82,20 +73,19 @@ def main():
         print("4. Salir")
 
         opcion = input("Elige una opción: ")
-        
+
         if opcion == "1":
-            peso = calcular_peso()
-            altura = calcular_altura()
+            peso = float(input("Introduce tu peso en kilogramos: "))
+            altura = float(input("Introduce tu altura en metros: "))
             IMC = calcular_IMC(peso, altura)
             estado_IMC = determinar_estado_IMC(obtener_estado_segun_IMC(IMC))
             print(f"Tu IMC es: {IMC}")
             print(f"Estado: {estado_IMC}")
-            registrar_datos_csv(peso, altura, IMC, estado_IMC)
+            registrar_datos_csv(IMC, estado_IMC)
         elif opcion == "2":
             mostrar_fecha_hora()
         elif opcion == "3":
-            datos_registrados = leer_datos_csv()
-            mostrar_grafica(datos_registrados)
+            mostrar_grafica()
         elif opcion == "4":
             print("¡Hasta luego!")
             break
