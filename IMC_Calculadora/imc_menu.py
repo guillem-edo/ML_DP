@@ -1,6 +1,7 @@
 import datetime
 import csv
 import os
+import matplotlib.pyplot as plt
 
 ruta_carpeta = r'\MACHINE-LEARNING\IMC_Calculadora\datos.csv'
 ruta_csv = os.path.join(ruta_carpeta, 'datos.csv')
