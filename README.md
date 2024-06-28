@@ -1,6 +1,6 @@
 ---
 
-# ML_DP Repository
+# Machine Learning and Deep Learning - Repository
 
 ## Overview
 Welcome to the ML_DP repository, a continuously updated resource for Machine Learning and Deep Learning projects. This repository is tailored for anyone interested in visualizing and understanding the workflow of various ML and DL projects using Jupyter notebooks.
